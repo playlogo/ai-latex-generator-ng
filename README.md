@@ -1,5 +1,10 @@
 # LaTeX Generator Plugin for Obsidian
 
+This is a fork of [aaaaayushh](https://github.com/aaaaayushh)'s [ai-latex-generator](https://github.com/aaaaayushh/ai-latex-generator) Obsidian plugin with some tweaks.
+
+---
+Old readme below
+
 ## Description
 
 The LaTeX Generator is a powerful plugin for Obsidian that allows you to easily convert natural language expressions into LaTeX equations. This plugin leverages the power of Ollama, a local LLM serving platform, to provide accurate and quick conversions right within your Obsidian editor.
