@@ -57,7 +57,9 @@ export default class LatexConverterPlugin extends Plugin {
         const ollamaEndpoint = 'http://localhost:11434/api/generate';
 
         try {
-            const prompt = this.settings.llmPrompt.replace('{input}', input);
+            // Escape double quotes and backslashes in the input to prevent prompt injection
+            const sanitizedInput = input.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            const prompt = this.settings.llmPrompt.replace('{input}', sanitizedInput);
             
             const response = await fetch(ollamaEndpoint, {
                 method: 'POST',
