@@ -54,6 +54,12 @@ To configure the LaTeX Generator plugin:
 2. Find "LaTeX Generator" in the list and click on the gear icon
 3. In the settings tab, you can:
    - Set the Ollama model to use for conversions (default is "llama2")
+   - Customize the LLM prompt template
+   - Configure the Keep Alive duration to control how long the model stays in memory after use:
+     - Use `"-1"` to keep the model loaded indefinitely (prevents unloading from memory)
+     - Use a duration string like `"5m"` for 5 minutes, `"10m"` for 10 minutes, etc.
+     - Default is `"5m"` (5 minutes)
+     - This setting controls the `keep_alive` parameter in Ollama API requests
 
 ## Troubleshooting
 
