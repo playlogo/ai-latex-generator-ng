@@ -2,10 +2,12 @@ import { App, Plugin, PluginSettingTab, Setting, Notice, Editor } from 'obsidian
 
 interface LatexConverterSettings {
     ollamaModel: string;
+    llmPrompt: string;
 }
 
 const DEFAULT_SETTINGS: LatexConverterSettings = {
-    ollamaModel: 'llama2'
+    ollamaModel: 'llama2',
+    llmPrompt: 'Convert the following natural language to a LaTeX equation, output ONLY THE EQUATION AND NOTHING ELSE: "{input}". Output should be in this format: ${output}$'
 }
 
 export default class LatexConverterPlugin extends Plugin {
@@ -55,6 +57,10 @@ export default class LatexConverterPlugin extends Plugin {
         const ollamaEndpoint = 'http://localhost:11434/api/generate';
 
         try {
+            // Escape double quotes and backslashes in the input to prevent prompt injection
+            const sanitizedInput = input.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            const prompt = this.settings.llmPrompt.replace('{input}', sanitizedInput);
+            
             const response = await fetch(ollamaEndpoint, {
                 method: 'POST',
                 headers: {
@@ -62,8 +68,7 @@ export default class LatexConverterPlugin extends Plugin {
                 },
                 body: JSON.stringify({
                     model: this.settings.ollamaModel,
-                    prompt: `Convert the following natural language to a LaTeX equation, output ONLY THE EQUATION AND NOTHING ELSE: "${input}".Output should
-                    be in this format: \${output}\$`,
+                    prompt: prompt,
                     stream: true,
                 }),
             });
@@ -149,6 +154,17 @@ class LatexConverterSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.ollamaModel)
                 .onChange(async (value) => {
                     this.plugin.settings.ollamaModel = value;
+                    await this.plugin.saveSettings();
+                }));
+
+        new Setting(containerEl)
+            .setName('LLM Prompt')
+            .setDesc('Customize the prompt sent to the LLM. Use {input} as a placeholder for the selected text.')
+            .addTextArea(text => text
+                .setPlaceholder('Enter custom prompt')
+                .setValue(this.plugin.settings.llmPrompt)
+                .onChange(async (value) => {
+                    this.plugin.settings.llmPrompt = value;
                     await this.plugin.saveSettings();
                 }));
     }
