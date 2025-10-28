@@ -3,11 +3,13 @@ import { App, Plugin, PluginSettingTab, Setting, Notice, Editor } from 'obsidian
 interface LatexConverterSettings {
     ollamaModel: string;
     llmPrompt: string;
+    keepAlive: string;
 }
 
 const DEFAULT_SETTINGS: LatexConverterSettings = {
     ollamaModel: 'llama2',
-    llmPrompt: 'Convert the following natural language to a LaTeX equation, output ONLY THE EQUATION AND NOTHING ELSE: "{input}". Output should be in this format: ${output}$'
+    llmPrompt: 'Convert the following natural language to a LaTeX equation, output ONLY THE EQUATION AND NOTHING ELSE: "{input}". Output should be in this format: ${output}$',
+    keepAlive: '5m'
 }
 
 export default class LatexConverterPlugin extends Plugin {
@@ -70,6 +72,7 @@ export default class LatexConverterPlugin extends Plugin {
                     model: this.settings.ollamaModel,
                     prompt: prompt,
                     stream: true,
+                    keep_alive: this.settings.keepAlive,
                 }),
             });
 
@@ -165,6 +168,17 @@ class LatexConverterSettingTab extends PluginSettingTab {
                 .setValue(this.plugin.settings.llmPrompt)
                 .onChange(async (value) => {
                     this.plugin.settings.llmPrompt = value;
+                    await this.plugin.saveSettings();
+                }));
+
+        new Setting(containerEl)
+            .setName('Keep Alive')
+            .setDesc('Duration to keep the model loaded in memory. Use "-1" to keep indefinitely, or specify a duration like "5m" for 5 minutes. Default is "5m".')
+            .addText(text => text
+                .setPlaceholder('5m')
+                .setValue(this.plugin.settings.keepAlive)
+                .onChange(async (value) => {
+                    this.plugin.settings.keepAlive = value;
                     await this.plugin.saveSettings();
                 }));
     }
