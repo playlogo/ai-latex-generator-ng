@@ -107,7 +107,8 @@ export default class LatexConverterPlugin extends Plugin {
                 }
             }
 
-            return latexEquation.trim();
+            // Remove all backtick characters from the LaTeX equation
+            return latexEquation.trim().replace(/`/g, '');
         } catch (error) {
             console.error('Error in callLocalLLM:', error);
             throw error;
