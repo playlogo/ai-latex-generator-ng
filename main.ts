@@ -108,7 +108,7 @@ export default class LatexConverterPlugin extends Plugin {
 				}
 			}
 
-			return latexEquation.trim();
+			return latexEquation.trim().replace(/`/g, "");
 		} catch (error) {
 			console.error("Error in callLocalLLM:", error);
 			throw error;
