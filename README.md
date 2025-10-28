@@ -1,6 +1,10 @@
 # LaTeX Generator Plugin for Obsidian
 
-This is a fork of [aaaaayushh](https://github.com/aaaaayushh)'s [ai-latex-generator](https://github.com/aaaaayushh/ai-latex-generator) Obsidian plugin with some tweaks.
+This is a fork of [aaaaayushh](https://github.com/aaaaayushh)'s [ai-latex-generator](https://github.com/aaaaayushh/ai-latex-generator) Obsidian plugin with some vibe coded tweaks.
+
+Tweaks:
+
+- Prompt can be modified via settings
 
 ---
 Old readme below
